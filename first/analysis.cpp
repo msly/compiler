@@ -4,6 +4,8 @@
 #include <string>
 
 
+using namespace std;
+
 std::string g_strScript;
 
 bool ReadFile()
@@ -43,7 +45,11 @@ void Analysis()
         {
             if (strTemp == "write")
             {
-                
+                std::cout << &g_strScript[i++] << std::endl;
+                int nNum;
+                std::cin >> nNum;
+                std::cout << nNum << std::endl;
+                return ;
             }
             std::cout << "空格：" << g_strScript[i] << std::endl;
         }
@@ -60,16 +66,96 @@ void Analysis()
 
 }
 
+void AnalysisCalc()
+{
+    while (true)
+    {
+        cout << "请输入:" << endl;
+        string strCalc;
+        cin >> strCalc;
+
+        int nLeft = 0, nRight = 0, nResult = 0;   
+        enum OP{NUL,ADD,SUB,MUL,DIV};
+        OP op = NUL;
+        bool bLeft = false;
+        for (int i=0; i<strCalc.size(); ++i)
+        {
+            cout << strCalc[i] << endl;
+            if (strCalc[i] >= '0' && strCalc[i] <= '9')
+            {
+                if (!bLeft)
+                {
+                    nLeft = nLeft * 10 + strCalc[i] - '0';
+                }
+                else
+                {
+                    nRight = nRight * 10 + strCalc[i] - '0';
+                }
+            }
+            else if (strCalc[i] == '+')
+            {
+                bLeft = true;
+                op = ADD;
+            }
+            else if (strCalc[i] == '-')
+            {
+                bLeft = true;
+                op = SUB;
+            }
+            else if (strCalc[i] == '*')
+            {
+                bLeft = true;
+                op = MUL;
+            }
+            else if (strCalc[i] == '/')
+            {
+                bLeft = true;
+                op = DIV;
+            }
+            else
+            {
+                i++;
+            }
+        }
+
+        if (op == NUL)
+        {
+            cerr << "OP 为 NUL" << endl;
+            return ;
+        }
+        else
+        {
+            if (op == ADD)
+                nResult = nLeft + nRight;
+            else if (op == SUB)
+                nResult = nLeft - nRight;
+            else if (op == MUL)
+                nResult = nLeft * nRight;
+            else if (op == DIV)
+            {
+                if (nRight == 0)
+                    cerr << "nRight不能为0" << endl;
+                else
+                    nResult = nLeft / nRight;
+            }
+            cout << "你输入的为: " << strCalc << "=" << nResult << endl;
+        }
+    }
+    
+}
+
 
 int main(int argc, char* argv[])
 {
-    if (!ReadFile())
-    {
-        std::cout << "read file failure" << std::endl;
-        return EXIT_FAILURE;
-    }
+    //if (!ReadFile())
+    //{
+    //    std::cout << "read file failure" << std::endl;
+    //    return EXIT_FAILURE;
+    //}
 
-    Analysis();
+    //Analysis();
+
+    AnalysisCalc();
 
     return 0;
 }
