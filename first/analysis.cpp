@@ -72,7 +72,8 @@ void AnalysisCalc()
     {
         cout << "ÇëÊäÈë:" << endl;
         string strCalc;
-        cin >> strCalc;
+        getline(cin, strCalc);
+        //cin >> strCalc;
 
         int nLeft = 0, nRight = 0, nResult = 0;   
         enum OP{NUL,ADD,SUB,MUL,DIV};
@@ -112,9 +113,9 @@ void AnalysisCalc()
                 bLeft = true;
                 op = DIV;
             }
-            else
+            else if (strCalc[i] == ' ')
             {
-                i++;
+                cout << "¿Õ¸ñ" << endl;
             }
         }
 
