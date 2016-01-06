@@ -10,7 +10,8 @@ public:
     {
         INTEGER = 0,
         PLUS = 1,
-        END = 2
+        MINUS = 2,
+        END = 3
     };
 
     

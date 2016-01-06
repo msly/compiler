@@ -9,6 +9,7 @@ Interpreter::Interpreter(std::string text)
     , pos(0)
     , current_token(Token::TYPE::END, 0)
 {
+    current_char = input_text[pos];
 }
 
 
@@ -34,7 +35,10 @@ int Interpreter::expr()
     eat(Token::TYPE::INTEGER);
 
     Token op = current_token;
-    eat(Token::TYPE::PLUS);
+    if (op.type == Token::TYPE::PLUS)
+        eat(Token::TYPE::PLUS);
+    else
+        eat(Token::TYPE::MINUS);
 
     Token right = current_token;
     eat(Token::TYPE::INTEGER);
@@ -48,20 +52,27 @@ int Interpreter::expr()
 
 Token Interpreter::get_next_token()
 {
-    if (pos > input_text.length() - 1){
-        return Token(Token::TYPE::END, 0);
-    }
+    while (current_char != '\0') {
 
-    char current_char = input_text[pos];
+        if (isspace(current_char))
+            skip_space();
 
-    while (isspace(current_char)) {
-        ++pos;
-
-        if (pos > input_text.length() - 1) {
-            return Token(Token::TYPE::END, 0);
+        if (isdigit(current_char)) {
+            return Token(Token::TYPE::INTEGER, integer());
         }
 
-        current_char = input_text[pos];
+        // plus
+        if (current_char == '+') {
+            advance();
+            return Token(Token::TYPE::PLUS, '+');
+        }
+
+        // minus
+        if (current_char == '-') {
+            advance();
+            return Token(Token::TYPE::MINUS, '-');
+        }
+
     }
 
     // digit
@@ -75,17 +86,35 @@ Token Interpreter::get_next_token()
     if (value != 0)
         return Token(Token::TYPE::INTEGER, value);
 
-    
-    // plus
-    if (current_char == '+' || current_char == '-') {
-        ++pos;
-        return Token(Token::TYPE::PLUS, current_char);
-    } 
-
-
-    cout << "get_next_token error" << endl;
     return Token(Token::TYPE::END, 0);
 
+}
+
+void Interpreter::skip_space() {
+    while (current_char != '\0' && isspace(current_char))
+        advance();
+}
+
+void Interpreter::advance() {
+
+    ++pos;
+
+    if (pos > input_text.length() - 1) {
+        current_char = '\0';
+    } else {
+        current_char = input_text[pos];
+    }
+    
+}
+
+int Interpreter::integer() {
+    string str;
+    while (current_char != '\0' && isdigit(current_char)) {
+        str.push_back(current_char);
+        advance();
+    }
+
+    return stoi(str);
 }
 
 
