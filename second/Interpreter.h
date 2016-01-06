@@ -10,15 +10,12 @@ public:
 
 public:
     int expr();
-
     void eat(Token::TYPE tpye);
+    int term();
 
     Token get_next_token();
-
     void skip_space();
-
     void advance();
-
     int integer();
 
 private:

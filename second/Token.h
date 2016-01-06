@@ -11,7 +11,9 @@ public:
         INTEGER = 0,
         PLUS = 1,
         MINUS = 2,
-        END = 3
+        MUL = 3,
+        DIV = 4,
+        END = 5
     };
 
     

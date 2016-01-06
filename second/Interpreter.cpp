@@ -17,6 +17,10 @@ Interpreter::~Interpreter()
 {
 }
 
+/************************************************************************/
+/* Parser / Interpreter code                                            */
+/************************************************************************/
+
 void Interpreter::eat(Token::TYPE type)
 {
     if (current_token.type == type) {
@@ -26,30 +30,40 @@ void Interpreter::eat(Token::TYPE type)
     }
 }
 
-// ·µ»Ø½á¹û
+int Interpreter::term() {
+
+    Token token = current_token;
+
+    eat(Token::TYPE::INTEGER);
+
+    return token.value;
+}
+
 int Interpreter::expr()
 {
     current_token = get_next_token();
 
-    Token left = current_token;
-    eat(Token::TYPE::INTEGER);
+    int result = term();
 
-    Token op = current_token;
-    if (op.type == Token::TYPE::PLUS)
-        eat(Token::TYPE::PLUS);
-    else
-        eat(Token::TYPE::MINUS);
+    while (current_token.type == Token::TYPE::PLUS 
+        || current_token.type == Token::TYPE::MINUS) {
 
-    Token right = current_token;
-    eat(Token::TYPE::INTEGER);
-
-    if (op.value == '+') {
-        return left.value + right.value;
-    } else {
-        return left.value - right.value;
+        Token op = current_token;
+        if (op.type == Token::TYPE::PLUS) {
+            eat(Token::TYPE::PLUS);
+            result = result + term();
+        } else if (op.type == Token::TYPE::MINUS) {
+            eat(Token::TYPE::MINUS);
+            result = result - term();
+        }
     }
+
+    return result;
 }
 
+/************************************************************************/
+/* Lexer code                                                           */
+/************************************************************************/
 Token Interpreter::get_next_token()
 {
     while (current_char != '\0') {
@@ -73,21 +87,21 @@ Token Interpreter::get_next_token()
             return Token(Token::TYPE::MINUS, '-');
         }
 
-    }
+        // minus
+        if (current_char == '*') {
+            advance();
+            return Token(Token::TYPE::MUL, '*');
+        }
 
-    // digit
-    int value = 0;
-    while (isdigit(current_char)) {
-        value = value * 10 + atoi(&current_char);
+        // minus
+        if (current_char == '/') {
+            advance();
+            return Token(Token::TYPE::DIV, '/');
+        }
 
-        ++pos;
-        current_char = input_text[pos];
     }
-    if (value != 0)
-        return Token(Token::TYPE::INTEGER, value);
 
     return Token(Token::TYPE::END, 0);
-
 }
 
 void Interpreter::skip_space() {
@@ -116,5 +130,7 @@ int Interpreter::integer() {
 
     return stoi(str);
 }
+
+
 
 
