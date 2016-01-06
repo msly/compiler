@@ -30,36 +30,62 @@ void Interpreter::eat(Token::TYPE type)
     }
 }
 
-int Interpreter::term() {
-
+int Interpreter::factor() {
     Token token = current_token;
-
     eat(Token::TYPE::INTEGER);
-
     return token.value;
 }
 
-int Interpreter::expr()
-{
+int Interpreter::expr() {
+
     current_token = get_next_token();
 
-    int result = term();
+    int result = factor();
 
-    while (current_token.type == Token::TYPE::PLUS 
-        || current_token.type == Token::TYPE::MINUS) {
+    while (current_token.type == Token::TYPE::MUL 
+        || current_token.type == Token::TYPE::DIV) {
 
-        Token op = current_token;
-        if (op.type == Token::TYPE::PLUS) {
-            eat(Token::TYPE::PLUS);
-            result = result + term();
-        } else if (op.type == Token::TYPE::MINUS) {
-            eat(Token::TYPE::MINUS);
-            result = result - term();
+        Token token = current_token;
+        if (token.type == Token::TYPE::MUL) {
+            eat(Token::TYPE::MUL);
+            result = result * factor();
+        } else if (token.type == Token::TYPE::DIV) {
+            eat(Token::TYPE::DIV);
+            result = result / factor();
         }
     }
-
+    
     return result;
 }
+
+int Interpreter::term() {
+
+    Token token = current_token;
+    eat(Token::TYPE::INTEGER);
+    return token.value;
+}
+
+// int Interpreter::expr()
+// {
+//     current_token = get_next_token();
+// 
+//     int result = term();
+// 
+//     while (current_token.type == Token::TYPE::PLUS 
+//         || current_token.type == Token::TYPE::MINUS) {
+// 
+//         Token op = current_token;
+//         if (op.type == Token::TYPE::PLUS) {
+//             eat(Token::TYPE::PLUS);
+//             result = result + term();
+//         } else if (op.type == Token::TYPE::MINUS) {
+//             eat(Token::TYPE::MINUS);
+//             result = result - term();
+//         }
+//     }
+// 
+//     return result;
+// }
 
 /************************************************************************/
 /* Lexer code                                                           */
@@ -130,6 +156,7 @@ int Interpreter::integer() {
 
     return stoi(str);
 }
+
 
 
 

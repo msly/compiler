@@ -12,6 +12,7 @@ public:
     int expr();
     void eat(Token::TYPE tpye);
     int term();
+    int factor();
 
     Token get_next_token();
     void skip_space();
