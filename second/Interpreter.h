@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Token.h"
+#include "Lexer.h"
 
 class Interpreter
 {
 public:
-    Interpreter(std::string text);
+    Interpreter(Lexer lexer);
     ~Interpreter();
 
 public:
@@ -14,18 +15,12 @@ public:
     int term();
     int factor();
 
-    Token get_next_token();
-    void skip_space();
-    void advance();
-    int integer();
+    
 
 private:
-
-    std::string input_text;
-
     Token current_token;
-    char current_char;
 
-    uint32_t pos;
+    Lexer lexer;
+    
 };
 

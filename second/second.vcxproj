@@ -66,11 +66,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Interpreter.h" />
+    <ClInclude Include="Lexer.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Token.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Interpreter.cpp" />
+    <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

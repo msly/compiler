@@ -4,12 +4,11 @@
 
 using namespace std;
 
-Interpreter::Interpreter(std::string text) 
-    : input_text(text)
-    , pos(0)
+Interpreter::Interpreter(Lexer lexer)
+    : lexer(lexer)
     , current_token(Token::TYPE::END, 0)
 {
-    current_char = input_text[pos];
+    
 }
 
 
@@ -24,7 +23,7 @@ Interpreter::~Interpreter()
 void Interpreter::eat(Token::TYPE type)
 {
     if (current_token.type == type) {
-        current_token = get_next_token();
+        current_token = lexer.get_next_token();
     } else {
         cout << "eat error" << endl;
     }
@@ -38,7 +37,7 @@ int Interpreter::factor() {
 
 int Interpreter::expr() {
 
-    current_token = get_next_token();
+    current_token = lexer.get_next_token();
 
     int result = factor();
 
@@ -87,75 +86,6 @@ int Interpreter::term() {
 //     return result;
 // }
 
-/************************************************************************/
-/* Lexer code                                                           */
-/************************************************************************/
-Token Interpreter::get_next_token()
-{
-    while (current_char != '\0') {
-
-        if (isspace(current_char))
-            skip_space();
-
-        if (isdigit(current_char)) {
-            return Token(Token::TYPE::INTEGER, integer());
-        }
-
-        // plus
-        if (current_char == '+') {
-            advance();
-            return Token(Token::TYPE::PLUS, '+');
-        }
-
-        // minus
-        if (current_char == '-') {
-            advance();
-            return Token(Token::TYPE::MINUS, '-');
-        }
-
-        // minus
-        if (current_char == '*') {
-            advance();
-            return Token(Token::TYPE::MUL, '*');
-        }
-
-        // minus
-        if (current_char == '/') {
-            advance();
-            return Token(Token::TYPE::DIV, '/');
-        }
-
-    }
-
-    return Token(Token::TYPE::END, 0);
-}
-
-void Interpreter::skip_space() {
-    while (current_char != '\0' && isspace(current_char))
-        advance();
-}
-
-void Interpreter::advance() {
-
-    ++pos;
-
-    if (pos > input_text.length() - 1) {
-        current_char = '\0';
-    } else {
-        current_char = input_text[pos];
-    }
-    
-}
-
-int Interpreter::integer() {
-    string str;
-    while (current_char != '\0' && isdigit(current_char)) {
-        str.push_back(current_char);
-        advance();
-    }
-
-    return stoi(str);
-}
 
 
 
