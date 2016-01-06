@@ -4,11 +4,12 @@
 
 using namespace std;
 
-Interpreter::Interpreter(Lexer lexer)
-    : lexer(lexer)
+Interpreter::Interpreter(Lexer le)
+    : lexer(le)
     , current_token(Token::TYPE::END, 0)
 {
-    
+    // get current_token
+    current_token = lexer.get_next_token();
 }
 
 
@@ -35,13 +36,11 @@ int Interpreter::factor() {
     return token.value;
 }
 
-int Interpreter::expr() {
-
-    current_token = lexer.get_next_token();
+int Interpreter::term() {
 
     int result = factor();
 
-    while (current_token.type == Token::TYPE::MUL 
+    while (current_token.type == Token::TYPE::MUL
         || current_token.type == Token::TYPE::DIV) {
 
         Token token = current_token;
@@ -53,41 +52,31 @@ int Interpreter::expr() {
             result = result / factor();
         }
     }
-    
+
     return result;
 }
 
-int Interpreter::term() {
+/*
+expr:term((PLUS|MINUS)term)*
+term:factor((MUL|DIV)factor)*
+factor:INTEGER
+*/
+int Interpreter::expr() {
 
-    Token token = current_token;
-    eat(Token::TYPE::INTEGER);
-    return token.value;
+    int result = term();
+
+    while (current_token.type == Token::TYPE::PLUS
+        || current_token.type == Token::TYPE::MINUS) {
+
+        Token op = current_token;
+        if (op.type == Token::TYPE::PLUS) {
+            eat(Token::TYPE::PLUS);
+            result = result + term();
+        } else if (op.type == Token::TYPE::MINUS) {
+            eat(Token::TYPE::MINUS);
+            result = result - term();
+        }
+    }
+
+    return result;
 }
-
-// int Interpreter::expr()
-// {
-//     current_token = get_next_token();
-// 
-//     int result = term();
-// 
-//     while (current_token.type == Token::TYPE::PLUS 
-//         || current_token.type == Token::TYPE::MINUS) {
-// 
-//         Token op = current_token;
-//         if (op.type == Token::TYPE::PLUS) {
-//             eat(Token::TYPE::PLUS);
-//             result = result + term();
-//         } else if (op.type == Token::TYPE::MINUS) {
-//             eat(Token::TYPE::MINUS);
-//             result = result - term();
-//         }
-//     }
-// 
-//     return result;
-// }
-
-
-
-
-
-
