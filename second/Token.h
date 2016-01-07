@@ -21,7 +21,7 @@ public:
     
 
 public:
-    Token(TYPE type, int value);
+    Token(TYPE type = Token::TYPE::END, int value = 0);
     ~Token();
 
 public:

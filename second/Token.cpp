@@ -4,7 +4,9 @@
 using namespace std;
 
 
-Token::Token(TYPE type, int value) : type(type), value(value)
+Token::Token(TYPE type/* = Token::TYPE::END*/, int value/* = 0*/) 
+    : type(type)
+    , value(value)
 {
        
 }

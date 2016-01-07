@@ -12,11 +12,10 @@ int main(){
         string str;
         getline(cin, str); // 会有空格之类的,用这个获取输入
 
-        Interpreter interpreter = Interpreter(str);
-        cout << "result:" << interpreter.expr() << endl;
+        Parser parser(str);
+        Interpreter interpreter(parser);
+        cout << "result:" << interpreter.interpret() << endl;
     }
-    
-
 
     getchar();
     return 0;

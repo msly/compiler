@@ -1,26 +1,22 @@
 #pragma once
 
-#include "Token.h"
-#include "Lexer.h"
+#include "Parser.h"
+
 
 class Interpreter
 {
 public:
-    Interpreter(Lexer lexer);
+    Interpreter(Parser parser);
     ~Interpreter();
 
 public:
-    int expr();
-    void eat(Token::TYPE tpye);
-    int term();
-    int factor();
 
-    
+    int interpret();
+
+    int visit(BinOp_ptr tree);
 
 private:
-    Token current_token;
-
-    Lexer lexer;
+    Parser parser;
     
 };
 
