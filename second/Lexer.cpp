@@ -52,6 +52,15 @@ Token Lexer::get_next_token() {
             return Token(Token::TYPE::DIV, '/');
         }
 
+        if (current_char == '(') {
+            advance();
+            return Token(Token::TYPE::LPAREN, '(');
+        }
+        if (current_char == ')') {
+            advance();
+            return Token(Token::TYPE::RPAREN, ')');
+        }
+
     }
 
     return Token(Token::TYPE::END, 0);
@@ -83,3 +92,5 @@ int Lexer::integer() {
 
     return stoi(str);
 }
+
+

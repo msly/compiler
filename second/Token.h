@@ -13,7 +13,9 @@ public:
         MINUS = 2,
         MUL = 3,
         DIV = 4,
-        END = 5
+        LPAREN = 5,
+        RPAREN = 6,
+        END = 7
     };
 
     

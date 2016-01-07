@@ -16,6 +16,6 @@ Token::~Token()
 
 std::string Token::toString()
 {
-    std::string typeName[] = { "INTEGER", "PLUS", "MINUS", "MUL", "DIV", "END" };
+    std::string typeName[] = { "INTEGER", "PLUS", "MINUS", "MUL", "DIV", "LPAREN", "RPAREN", "END" };
     return "TOKEN(" + typeName[static_cast<int>(this->type)] + ", " + to_string(this->value) + ")";
 }

@@ -32,8 +32,20 @@ void Interpreter::eat(Token::TYPE type)
 
 int Interpreter::factor() {
     Token token = current_token;
-    eat(Token::TYPE::INTEGER);
-    return token.value;
+
+    if (token.type == Token::TYPE::INTEGER) {
+        eat(Token::TYPE::INTEGER);
+        return token.value;
+    } else if (token.type == Token::TYPE::LPAREN) {
+        eat(Token::TYPE::LPAREN);
+
+        int ret = expr();
+
+        eat(Token::TYPE::RPAREN);
+        return ret;
+    } 
+    cout << "factor error" << endl;
+    return 0;
 }
 
 int Interpreter::term() {
